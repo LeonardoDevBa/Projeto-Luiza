@@ -1,28 +1,57 @@
-from models.usuario_model import Usuario, Empresa
+from models.usuario_model import Funcionario
+from models.usuario_model import Garagem
+from models.usuario_model import Item
 from sqlalchemy.orm import Session
 
 class UsuarioRepository:
-    def __init__(self, session:Session):
-        
+    def __init__(self, session: Session):
         self.session = session
 
-    def salvar_usuario(self, usuario:Usuario):
-        self.session.add(usuario)
+    # Métodos para Funcionario
+    def salvar_funcionario(self, funcionario: Funcionario):
+        self.session.add(funcionario)
         self.session.commit()
 
-    def pesquisar_usuario(self, cpf: str):
-        return self.session.query(Usuario).filter_by(cpf=cpf).first()
-    
-    def excluir_usuario(self, usuario:Usuario):
-        self.session.delete(usuario)
+    def pesquisar_funcionario(self, matricula: str):
+        return self.session.query(Funcionario).filter_by(matricula=matricula).first()
+
+    def excluir_funcionario(self, funcionario: Funcionario):
+        self.session.delete(funcionario)
         self.session.commit()
 
-    def atualizar_cadastro (self, usuario:Usuario):
+    def atualizar_cadastro_funcionario(self, funcionario: Funcionario):
         self.session.commit()
-        self.session.refresh(usuario)
-    
-    def lista_usuarios(self):
-        return self.session.query(Usuario).all()
-    
-    def pesquisar_empresa(self, cnpj: str):
-        return self.session.query(Empresa).filter_by(cnpj = cnpj).first()
+        self.session.refresh(funcionario)
+
+    def listar_funcionarios(self):
+        return self.session.query(Funcionario).all()
+
+    # Métodos para Garagem
+    def salvar_garagem(self, garagem: Garagem):
+        self.session.add(garagem)
+        self.session.commit()
+
+    def pesquisar_garagem(self, localizacao: str):
+        return self.session.query(Garagem).filter_by(localizacao=localizacao).first()
+
+    def excluir_garagem(self, garagem: Garagem):
+        self.session.delete(garagem)
+        self.session.commit()
+
+    def listar_garagens(self):
+        return self.session.query(Garagem).all()
+
+    # Métodos para Item
+    def salvar_item(self, item: Item):
+        self.session.add(item)
+        self.session.commit()
+
+    def pesquisar_item(self, item_id: int):
+        return self.session.query(Item).filter_by(id=item_id).first()
+
+    def excluir_item(self, item: Item):
+        self.session.delete(item)
+        self.session.commit()
+
+    def listar_itens(self):
+        return self.session.query(Item).all()

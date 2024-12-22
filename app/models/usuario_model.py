@@ -1,45 +1,65 @@
-from sqlalchemy import Column, Integer, String, DateTime,ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
-from config.database import db
 
 Base = declarative_base()
-class Empresa(Base):
-    __tablename__ = "empresas"
 
+class Funcionario(Base):
+    __tablename__ = "funcionarios"
+
+    #Informações do Funcionario, para cadastro no sistema de gestão de itens entre as garagens.
     nome = Column(String(100))
-    cnpj = Column(String(14),primary_key = True)
-    responsavel = Column(String(100))
-    email = Column(String(100))
+    matricula = Column(String(4), primary_key=True)
     senha = Column(String(100))
 
-    usuarios = relationship("Usuario", back_populates="empresa", cascade="all, delete-orphan")
-    
-    def __init__(self,nome:str, cnpj:str, responsavel:str, email:str, senha:str):
+    # Relacionamento com Garagem e Item
+    garagens = relationship("Garagem", back_populates="funcionario", cascade="all, delete-orphan")
+    itens = relationship("Item", back_populates="funcionario", cascade="all, delete-orphan")
+
+    def __init__(self, nome: str, matricula: str, senha: str):
         self.nome = nome
-        self.cnpj = cnpj
-        self.responsavel = responsavel
-        self.email = email
+        self.matricula = matricula
         self.senha = senha
 
-class Usuario(Base):
-    __tablename__ = "usuarios"
 
-    cpf = Column(String(255), primary_key=True)
-    nome = Column(String(100))
-    sobrenome = Column(String(100))
-    idade = Column(Integer)
-    email = Column(String(100),primary_key=True)
-    admissao = Column(DateTime)
-    rg = Column(String(15))
-    empresa_cnpj = Column(String(14), ForeignKey("empresas.cnpj"))
+class Garagem(Base):
+    __tablename__ = "garagens"
 
-    empresa = relationship("Empresa", back_populates="usuarios")
+    #Informações da Garagem.
+    nome = Column(String(25))
+    localizacao = Column(String(255), primary_key=True)
+    adicionais = Column(String(500))
 
-    def __init__(self, cpf:str, nome: str,sobrenome: str, idade:int, email:str, admissao:DateTime,rg: str):
-        self.cpf = cpf
+    matricula = Column(String(4), ForeignKey("funcionarios.matricula"))
+
+    # Relacionamento com Funcionario e Item
+    funcionario = relationship("Funcionario", back_populates="garagens")
+    itens = relationship("Item", back_populates="garagem", cascade="all, delete-orphan")
+
+    def __init__(self, nome: str, localizacao: str, adicionais: str):
         self.nome = nome
-        self.sobrenome = sobrenome
-        self.idade = idade
-        self.email = email
-        self.admissao = admissao
-        self.rg = rg
+        self.localizacao = localizacao
+        self.adicionais = adicionais
+
+
+class Item(Base):
+    __tablename__ = "itens"
+
+    #Informações dos itens
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(100), nullable=False)
+    quantidade = Column(Integer(4),nullable=False)
+    descricao = Column(String(255), nullable=True)
+
+    # Chaves de relação
+    matricula_funcionario = Column(String(4), ForeignKey("funcionarios.matricula"))
+    localizacao_garagem = Column(String(255), ForeignKey("garagens.localizacao"))
+
+    # Relacionamentos das tabelas com os itens adicionados
+    funcionario = relationship("Funcionario", back_populates="itens")
+    garagem = relationship("Garagem", back_populates="itens")
+
+    def __init__(self, nome: str, descricao: str, matricula_funcionario: str, localizacao_garagem: str):
+        self.nome = nome
+        self.descricao = descricao
+        self.matricula_funcionario = matricula_funcionario
+        self.localizacao_garagem = localizacao_garagem

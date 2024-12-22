@@ -5,7 +5,7 @@ Este programa é projetado para gerenciar o envio de objetos relacionados à ár
 ## Funcionalidades  
 
 ### 1. Cadastro de Produtos  
-- Registro detalhado dos objetos a serem movimentados.  
+- Registro detalhado 980 objetos a serem movimentados.  
 - Campos como:  
   - **Nome**  
   - **Descrição**  
