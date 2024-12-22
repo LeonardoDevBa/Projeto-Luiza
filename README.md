@@ -1,16 +1,39 @@
-# Projeto-Luiza
-O sistema proposto é um programa voltado para o gerenciamento do envio de objetos relacionados à área de Tecnologia da Informação (TI) entre diferentes garagens. Para atender às necessidades do processo, o programa deverá incluir os seguintes recursos principais:
+# Sistema de Gerenciamento de Movimentação de Objetos de TI  
 
-Cadastro de Produtos:
-O sistema permitirá o registro detalhado dos produtos que serão movimentados. Cada item cadastrado poderá conter informações como nome, descrição, código de identificação, quantidade disponível, entre outros detalhes relevantes.
+Este programa é projetado para gerenciar o envio de objetos relacionados à área de Tecnologia da Informação (TI) entre diferentes garagens. Ele oferece funcionalidades essenciais para cadastro, rastreamento e segurança das operações.  
 
-**Cadastro de Garagens:
-Será possível registrar as garagens envolvidas no transporte dos objetos. Essas garagens poderão ser identificadas por campos como nome, localização e outras informações necessárias para o gerenciamento eficiente.
+## Funcionalidades  
 
-**Histórico de Movimentações:
-O sistema registrará todas as movimentações de objetos entre as garagens, criando um histórico detalhado. Esse histórico incluirá informações como data e hora da transferência, produto enviado, origem, destino e usuário responsável pela ação. Esse recurso será essencial para rastrear e auditar o fluxo de itens.
+### 1. Cadastro de Produtos  
+- Registro detalhado dos objetos a serem movimentados.  
+- Campos como:  
+  - **Nome**  
+  - **Descrição**  
+  - **Código de identificação**  
+  - **Quantidade**  
 
-**Controle de Acesso com Login e Senha:
-Para garantir a segurança e a privacidade dos dados, o programa contará com um sistema de autenticação. Cada usuário deverá realizar login utilizando credenciais (nome de usuário e senha). Isso permitirá restringir o acesso ao sistema apenas a usuários autorizados e registrar as ações realizadas por cada usuário.
+### 2. Cadastro de Garagens  
+- Registro das garagens participantes no sistema.  
+- Identificação por:  
+  - **Nome**  
+  - **Localização**  
+  - **Informações adicionais**  
 
-Esses elementos tornam o sistema completo para atender ao objetivo de organizar e rastrear o envio de objetos da área de TI entre garagens, proporcionando segurança, eficiência e rastreabilidade.
+### 3. Histórico de Movimentações  
+- Registro completo de todas as transferências entre garagens.  
+- Detalhes incluem:  
+  - **Data e hora da movimentação**  
+  - **Produto enviado**  
+  - **Origem e destino**  
+  - **Usuário responsável**  
+
+### 4. Controle de Acesso  
+- Sistema de autenticação com:  
+  - **Login**  
+  - **Senha**  
+- Acesso restrito a usuários autorizados.  
+- Registro das ações realizadas por cada usuário para maior segurança e rastreabilidade.  
+
+---
+
+Este sistema é ideal para otimizar a organização, a segurança e o controle de objetos entre garagens.  
