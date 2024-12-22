@@ -1,6 +1,4 @@
-from models.usuario_model import Funcionario
-from models.usuario_model import Garagem
-from models.usuario_model import Item
+from models.usuario_model import Funcionario, Garagem, Item
 from sqlalchemy.orm import Session
 
 class UsuarioRepository:
