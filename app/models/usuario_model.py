@@ -47,7 +47,7 @@ class Item(Base):
     #Informações dos itens
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
-    quantidade = Column(Integer(4),nullable=False)
+    quantidade = Column(Integer,nullable=False)
     descricao = Column(String(255), nullable=True)
 
     # Chaves de relação
