@@ -2,38 +2,45 @@ from models.usuario_model import Funcionario, Garagem, Item
 from repositories.usuario_repository import UsuarioRepository
 from datetime import datetime
 from time import sleep
+from os import system
+
+branco = "\033[97m"
+cor = "\033[31m"  
+limpar = system("cls||clear")
+reset = "\033[0m" 
 
 class UsuarioService:
     def __init__(self, repository: UsuarioRepository):
         self.repository = repository
 
     # Criando Funcionario
-    def criando_funcionario(self, matricula: str, nome: str, sobrenome: str, idade: int, email: str, admissao: datetime, rg: str):
+    def criando_funcionario(self, nome: str, matricula: str, senha: str):
         try:
+            # Validação da matrícula
             if len(matricula) != 4 or not matricula.isdigit():
-                print("Matrícula inválida!")
+                print(f"{cor}Matrícula inválida! A matrícula deve ter 4 dígitos numéricos.{reset}")
                 sleep(3)
                 return
 
-            funcionario = Funcionario(
-                matricula=matricula, nome=nome, sobrenome=sobrenome, idade=idade,
-                email=email, admissao=admissao, rg=rg
-            )
-            funcionario_cadastrado = self.repository.pesquisar_funcionario(funcionario.matricula)
-
+            # Verificando se o funcionário já está cadastrado
+            funcionario_cadastrado = self.repository.pesquisar_funcionario(matricula)
             if funcionario_cadastrado:
-                print("Funcionário já cadastrado!")
+                print(f"{cor}Funcionário já cadastrado!{reset}")
                 sleep(3)
                 return
-            
-            self.repository.salvar_usuario(funcionario)
-            print("Funcionário cadastrado com sucesso")
+
+            # Criando o objeto Funcionario
+            funcionario = Funcionario(nome=nome, matricula=matricula, senha=senha)
+
+            # Salvando no banco de dados
+            self.repository.salvar_funcionario(funcionario)
+            print(f"{branco}Funcionário cadastrado com sucesso!{reset}")
             sleep(3)
         except TypeError as erro:
-            print(f"Erro ao salvar o funcionário: {erro}")
+            print(f"{cor}Erro ao salvar o funcionário: {erro}{reset}")
             sleep(3)
         except Exception as erro:
-            print(f"Ocorreu um erro inesperado: {erro}")
+            print(f"{cor}Ocorreu um erro inesperado: {erro}{reset}")
             sleep(3)
 
     # Criando Garagem
@@ -85,7 +92,7 @@ class UsuarioService:
     # Listar Funcionários
     def listar_funcionarios(self):
         try:
-            funcionarios = self.repository.lista_usuarios()
+            funcionarios = self.repository.listar_funcionarios()
             return funcionarios
         except Exception as erro:
             print(f"Erro ao listar funcionários: {erro}")

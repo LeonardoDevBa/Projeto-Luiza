@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
+from config.database import db
 
 Base = declarative_base()
 
@@ -63,3 +64,5 @@ class Item(Base):
         self.descricao = descricao
         self.matricula_funcionario = matricula_funcionario
         self.localizacao_garagem = localizacao_garagem
+
+Base.metadata.create_all(bind=db)
