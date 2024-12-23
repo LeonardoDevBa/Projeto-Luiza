@@ -44,12 +44,8 @@ class UsuarioRepository:
         self.session.add(item)
         self.session.commit()
 
-    def pesquisar_item_id(self, item_id: int):
+    def pesquisar_item(self, item_id: int):
         return self.session.query(Item).filter_by(id=item_id).first()
-
-    def pesquisar_item_nome(self, nome_item:str):
-        return self.session.query(Item).filter_by(nome=nome_item).first()
-
 
     def excluir_item(self, item: Item):
         self.session.delete(item)

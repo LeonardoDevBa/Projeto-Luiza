@@ -11,6 +11,7 @@ while True:
         case "1":
             limpar
             while True:
+                limpar
                 functions_app.menu_cadastro()
                 opcao1 = input(": ")
                 match opcao1:
@@ -21,8 +22,8 @@ while True:
                     case "3":
                         functions_app.cadastro_itens()
         case "2":
-            pass
+            functions_app.solicitacao()
         case "3":
-            pass
+            functions_app.historico()
         case "4":
             break
