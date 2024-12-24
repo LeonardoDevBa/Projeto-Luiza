@@ -1,6 +1,5 @@
 from services.usuario_service import UsuarioService
 from repositories.usuario_repository import UsuarioRepository
-from datetime import datetime
 from config.database import Session
 from cryptography.fernet import Fernet
 import pwinput as pin
@@ -32,15 +31,17 @@ def gerar_chave():
 
 def criptografia(texto):
     texto_criptografado = cipher.encrypt(texto.encode("utf-8"))
-    return texto_criptografado
+    return texto_criptografado.decode("utf-8")
 
 def descriptografia(texto):
     if texto is None:
-        raise ValueError("Senha não pode ser None!")
-    if isinstance(texto, str):
-        texto = texto.encode("utf-8")
+        raise ValueError("Texto criptografado não pode ser None!")
+    if not isinstance(texto, str):
+        raise ValueError(f"A entrada para descriptografia deve ser uma string! Entrada recebida: {type(texto)}")
     try:
-        return cipher.decrypt(texto).decode("utf-8")
+        texto_criptografado = texto.encode("utf-8")  # Converte de volta para bytes
+        texto_descriptografado = cipher.decrypt(texto_criptografado).decode("utf-8")
+        return texto_descriptografado
     except Exception as e:
         raise ValueError(f"Erro na descriptografia: {e}")
 
@@ -68,28 +69,36 @@ def verificar_item(a):
     return funcionario is not None
 
 def criando_arquivo_final(caminho, dados):
-    with open(caminho, "w") as arquivo:
+    with open(caminho, "a") as arquivo:
         if isinstance(dados, list):
             for dado in dados:
-                if isinstance(dado, bytes):
-                    dado = dado.decode("utf-8")
-                arquivo.write(dado)
+                if not isinstance(dado, str):
+                    raise ValueError(f"Dado inválido para criptografia: {dado}")
+                criptografado = criptografia(dado)
+                arquivo.write(f"{criptografado}\n")  # Cada linha é uma entrada criptografada
         else:
-            if isinstance(dados, bytes):
-                dados = dados.decode("utf-8")
-            arquivo.write(dados)
+            if not isinstance(dados, str):
+                raise ValueError(f"Dado inválido para criptografia: {dados}")
+            criptografado = criptografia(dados)
+            arquivo.write(f"{criptografado}\n")  # Escreve a string criptografada
     print("\n=== Dados Salvos ===\n")
 
 def lendo_arquivo_final(caminho):
     try:
         with open(caminho, "r") as arquivo:
-            dados = arquivo.read()
+            linhas = arquivo.readlines()  # Lê todas as linhas do arquivo
             print("\n=== Dados Lidos ===\n")
-            return dados
+            descriptografados = []
+            for linha in linhas:
+                linha = linha.strip()  # Remove espaços em branco e quebras de linha
+                if linha:  # Verifica se a linha não está vazia
+                    if not isinstance(linha, str):
+                        raise ValueError(f"Linha inesperada para descriptografia: {linha}")
+                    descriptografados.append(descriptografia(linha))  # Descriptografa a linha
+            return descriptografados
     except FileNotFoundError:
         print("Erro: O arquivo especificado não foi encontrado.")
         return None
     except Exception as erro:
         print(f"Erro ao ler o arquivo: {erro}")
         return None
-

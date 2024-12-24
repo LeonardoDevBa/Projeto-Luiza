@@ -13,7 +13,7 @@ while True:
             while True:
                 limpar
                 functions_app.menu_cadastro()
-                opcao1 = input(": ")
+                opcao1 = input("0 - Sair\n: ").lower()
                 match opcao1:
                     case '1':
                         functions_app.cadastrando_funcionario()
@@ -21,6 +21,9 @@ while True:
                         functions_app.cadastro_garagens()
                     case "3":
                         functions_app.cadastro_itens()
+                    case "0" |"sair":
+                        break
+                        
         case "2":
             functions_app.solicitacao()
         case "3":

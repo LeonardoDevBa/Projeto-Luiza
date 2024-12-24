@@ -3,7 +3,7 @@ from repositories.usuario_repository import UsuarioRepository
 from functions import configuracoes_app
 from datetime import datetime
 from config.database import Session
-from cryptography.fernet import Fernet
+import pytz
 import pwinput as pin
 from os import system
 from time import sleep
@@ -13,6 +13,7 @@ cor = "\033[31m"
 limpar = system("cls||clear")
 reset = "\033[0m"
 
+fuso_brasilia = pytz.timezone("America/Sao_Paulo")
 session = Session()
 repository = UsuarioRepository(session)
 service = UsuarioService(repository)
@@ -20,7 +21,7 @@ service = UsuarioService(repository)
 
 def descricao():
     descricao = input(f"{branco}Descrição: {reset}")
-    data = datetime.now()
+    data = datetime.now(fuso_brasilia)
     dados = ("Data/Hora: ", data, "Descrição: ", descricao)
     dados_formatados = " ".join(map(str, dados))
     return dados_formatados
@@ -116,23 +117,27 @@ def login():
     return funcionario
 
 def solicitacao():
-    funcinario = login()
+    funcionario = login()
     print("\n================= Itens =================")
     itens = service.listar_itens()
     for item in itens:
         print(f"ID: {item.id}   Nome: {item.nome}   QTD: {item.quantidade}  Garagem: {item.localizacao_garagem}")
     while True:
         id_solic = str(input("ID do item: "))
-        solic = str(input("Quantidade: "))
-        if solic.isnumeric() and id_solic.isnumeric():
+        qtd_solic = str(input("Quantidade: "))
+        item_ed = repository.pesquisar_item(id_solic)
+        if qtd_solic.isnumeric() and id_solic.isnumeric():
             id_solic = int(id_solic)
-            solic = int(solic)
-            break
+            qtd_solic = int(qtd_solic)
+            if item_ed != None:
+                break
+            else:
+                print("Codigo Invalido!")
         else:
             print("Apenas numeros!")
         
     item_ed = repository.pesquisar_item(id_solic)
-    qtd = (item_ed.quantidade - solic)
+    qtd = (item_ed.quantidade - qtd_solic)
     if item_ed:
         nome = item_ed.nome
         quantidade = qtd
@@ -140,16 +145,24 @@ def solicitacao():
         item_ed.quantidade = quantidade
         repository.atualizar_cadastro_item(item_ed)
         print("\n=== Estoque atualizados com sucesso! ===")
+    data = datetime.now(fuso_brasilia)
+    data = str(data)
+    dados = ["Funcionario:",funcionario.nome,"Quantidade:",qtd_solic,"ID Item:", id_solic,"Nome item: ",item_ed.nome,"Origem: ",item_ed.localizacao_garagem,"Data:",data]
+    dados_formatados = str(dados)
+    dados_cripitografados = configuracoes_app.criptografia(dados_formatados)
+    arquivo = "Historico.txt"
+    configuracoes_app.criando_arquivo_final(arquivo,dados_cripitografados)
 
 def historico():
     dados_criptografados = configuracoes_app.lendo_arquivo_final("Historico.txt")
-    if dados_criptografados:
-        try:
-            dados_descriptografados = configuracoes_app.descriptografia(dados_criptografados)
-            print("=== Dados Descriptografados ===")
-            print(dados_descriptografados)
-        except ValueError as e:
-            print(f"Erro na descriptografia: {e}")
-    else:
-        print("Nenhum dado foi encontrado ou erro ao ler o arquivo.")
+    for dado in dados_criptografados:
+        dado = str(dado)
+        if dados_criptografados:
+            try:
+                dados_descriptografados = configuracoes_app.descriptografia(dado)
+                print(dados_descriptografados)
+            except ValueError as e:
+                print(f"Erro na descriptografia: {e}")
+        else:
+            print("Nenhum dado foi encontrado ou erro ao ler o arquivo.")
     sleep(10)
