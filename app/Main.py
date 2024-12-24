@@ -2,31 +2,38 @@ from functions import functions_app
 from os import system 
 from time import sleep
 
-limpar = ("cls||clear")
+def limpar():
+    system("cls||clear")
 
 while True:
+    limpar()
     functions_app.menu()
     opcao = input(": ")
     match opcao:
         case "1":
-            limpar
+            limpar()
             while True:
-                limpar
+                limpar()
                 functions_app.menu_cadastro()
                 opcao1 = input("0 - Sair\n: ").lower()
                 match opcao1:
                     case '1':
                         functions_app.cadastrando_funcionario()
+                        sleep(2)
                     case "2":
                         functions_app.cadastro_garagens()
+                        sleep(2)
                     case "3":
                         functions_app.cadastro_itens()
+                        sleep(2)
                     case "0" |"sair":
-                        break
-                        
+                        limpar()
+                        break  
         case "2":
             functions_app.solicitacao()
+            sleep(3)
         case "3":
             functions_app.historico()
+            sleep(3)
         case "4":
             break
