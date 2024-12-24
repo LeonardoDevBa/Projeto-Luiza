@@ -1,5 +1,5 @@
 
-                                    garagem = str(input("Informe para qual garagem: "))
+"""garagem = str(input("Informe para qual garagem: "))
                                     gar = repository.pesquisar_garagem(garagem)
                                     # Comparação correta de garagem
                                     if garagem.strip().lower() == gar.localizacao.strip().lower():
@@ -28,4 +28,4 @@
                             break
                         case "_":
                             print("Opção inválida!")
-                            sleep(2)
+                            sleep(2)"""
