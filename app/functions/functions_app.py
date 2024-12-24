@@ -121,8 +121,26 @@ def solicitacao():
     itens = service.listar_itens()
     for item in itens:
         print(f"ID: {item.id}   Nome: {item.nome}   QTD: {item.quantidade}  Garagem: {item.localizacao_garagem}")
-    
-    
+    while True:
+        id_solic = str(input("ID do item: "))
+        solic = str(input("Quantidade: "))
+        if solic.isnumeric() and id_solic.isnumeric():
+            id_solic = int(id_solic)
+            solic = int(solic)
+            break
+        else:
+            print("Apenas numeros!")
+        
+    item_ed = repository.pesquisar_item(id_solic)
+    qtd = (item_ed.quantidade - solic)
+    if item_ed:
+        nome = item_ed.nome
+        quantidade = qtd
+        item_ed.nome = nome
+        item_ed.quantidade = quantidade
+        repository.atualizar_cadastro_item(item_ed)
+        print("\n=== Estoque atualizados com sucesso! ===")
+
 def historico():
     dados_criptografados = configuracoes_app.lendo_arquivo_final("Historico.txt")
     if dados_criptografados:

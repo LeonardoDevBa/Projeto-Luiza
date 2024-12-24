@@ -43,6 +43,10 @@ class UsuarioRepository:
     def salvar_item(self, item: Item):
         self.session.add(item)
         self.session.commit()
+    
+    def atualizar_cadastro_item(self, item: Item):
+        self.session.commit()
+        self.session.refresh(item)
 
     def pesquisar_item(self, item_id: int):
         return self.session.query(Item).filter_by(id=item_id).first()
