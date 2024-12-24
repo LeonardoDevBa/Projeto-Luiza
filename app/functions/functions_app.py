@@ -53,7 +53,7 @@ def cadastro_garagens():
             print(f"{cor}Erro! Garagem já cadastrada{reset}")
         else:
             break
-    adicionais = input("Dados Adicionais")
+    adicionais = input("Dados Adicionais: ")
 
     service.criando_garagem(nome,localizacao,adicionais)
 
